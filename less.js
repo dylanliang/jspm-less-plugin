@@ -5,12 +5,12 @@ if (typeof window !== 'undefined') {
     var head = document.getElementsByTagName('head')[0];
 
     // get all injected style tags in the page
-    var styles = document.getElementsByTagName('style');
-    var styleIds = [];
-    for (var i = 0; i < styles.length; i++) {
-        if (!styles[i].hasAttribute("data-href")) continue;
-        styleIds.push(styles[i].getAttribute("data-href"));
-    }
+    //var styles = document.getElementsByTagName('style');
+    //var styleIds = [];
+    //for (var i = 0; i < styles.length; i++) {
+    //    if (!styles[i].hasAttribute("data-href")) continue;
+    //    styleIds.push(styles[i].getAttribute("data-href"));
+    //}
 
     var loadStyle = function (url) {
         return new Promise(function (resolve, reject) {
@@ -56,9 +56,15 @@ if (typeof window !== 'undefined') {
 
     exports.fetch = function (load) {
         // don't reload styles loaded in the head
-        for (var i = 0; i < styleIds.length; i++)
-            if (load.address == styleIds[i])
-                return '';
+        //for (var i = 0; i < styleIds.length; i++)
+        //    if (load.address == styleIds[i])
+        //        return '';
+        var styles = document.getElementsByTagName('style');
+        for (var i = 0; i < styles.length; i++){
+            if(styles[i].hasAttribute("data-href") && styles[i].getAttribute("data-href") == load.address){
+                styles[i].parentNode.removeChild(styles[i]);
+            }
+        }
         return loadStyle(load.address);
     }
 }
